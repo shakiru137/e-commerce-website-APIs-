@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Results - E-Library{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold mb-2">Search Results for "{{ query }}"</h1>
+        <p class="text-gray-600">{{ books|length }} results found</p>
+    </div>
+    
+    {% if books %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for book in books %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden book-card">
+                <a href="{{ url_for('book_detail', book_id=book.id) }}">
+                    <img src="{{ book.image_url }}" alt="{{ book.title }}" class="w-full h-64 object-cover">
+                    <div class="p-4">
+                        <h3 class="text-lg font-semibold mb-1 truncate">{{ book.title }}</h3>
+                        <p class="text-gray-600 mb-2">{{ book.author }}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-emerald-700 font-bold">${{ "%.2f"|format(book.price) }}</span>
+                            <span class="text-sm text-gray-500">{{ book.category }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="bg-white rounded-lg shadow-md p-8 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <h2 class="text-xl font-medium text-gray-600 mb-4">No results found</h2>
+            <p class="text-gray-500 mb-6">We couldn't find any books matching your search query.</p>
+            <a href="{{ url_for('index') }}" class="bg-emerald-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-emerald-700 transition-colors inline-block">
+                Browse All Books
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
